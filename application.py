@@ -31,11 +31,14 @@ class Product:
         print("Current Stock:", stock_difference)
 
         total_units_sold = number_of_units_sold
+        total_units_manufactured = self.stock_level
 
         for months in range(1, 12):
             print("\nMonth", months+1)
 
             stock_difference += self.estimated_monthly_units #! Units being produced monthly 
+            total_units_manufactured += self.estimated_monthly_units
+
             if stock_difference <= 0:
                 total_units_sold += number_of_units_sold + stock_difference
                 print("Out of Stock!")
@@ -49,7 +52,10 @@ class Product:
 
                 total_units_sold += number_of_units_sold
 
-        print("Total Units Sold:", total_units_sold)
+        print("\n\nTotal Units Sold:", total_units_sold)
+        print("Total Stock Produced: ", total_units_manufactured)
+        
+        print("Net-profit: $", total_units_sold * self.sale_price - total_units_manufactured * self.manufacture_cost)
 
 def ask_product_code():
     while True:
@@ -71,7 +77,7 @@ def ask_product_name():
 def ask_product_sale_price():
     while True:
         global p_sale_price
-        p_sale_price = int(input("\nPlease input the product sale price: "))
+        p_sale_price = float(input("\nPlease input the product sale price: "))
         if p_sale_price > 0:
             ask_product_manufacture_cost()
             break
@@ -81,7 +87,7 @@ def ask_product_sale_price():
 def ask_product_manufacture_cost():
     while True:
         global p_manufacture_cost
-        p_manufacture_cost = int(input("\nPlease input the product manufacture cost: "))
+        p_manufacture_cost = float(input("\nPlease input the product manufacture cost: "))
         if p_manufacture_cost > 0:
             ask_stock_level()
             break
@@ -109,9 +115,14 @@ def ask_estimated_monthly_units_manufactured():
             print("Please enter a valid estimate of units that will be manufactured monthly:")
 
 
+#! Program Call
 ask_product_code()
 
+#! Class Call
 product_one = Product(p_code, p_name, p_sale_price, p_manufacture_cost, p_stock_level, p_estimated_monthly_units)
 
+#! Product Information
 product_one.show()
+
+#! Product Sales Overview
 product_one.product_sales()
