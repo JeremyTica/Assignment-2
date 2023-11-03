@@ -29,16 +29,27 @@ class Product:
         print(number_of_units_sold, "Units Sold")
         stock_difference = self.stock_level - number_of_units_sold
         print("Current Stock:", stock_difference)
+
+        total_units_sold = number_of_units_sold
+
         for months in range(1, 12):
             print("\nMonth", months+1)
+
+            stock_difference += self.estimated_monthly_units #! Units being produced monthly 
             if stock_difference <= 0:
+                total_units_sold += number_of_units_sold + stock_difference
                 print("Out of Stock!")
                 break
             else:
                 number_of_units_sold = 10 * random.randint(1,10)
+
                 print(number_of_units_sold, "Units Sold")
                 stock_difference -= number_of_units_sold
                 print("Current Stock:", stock_difference)
+
+                total_units_sold += number_of_units_sold
+
+        print("Total Units Sold:", total_units_sold)
 
 def ask_product_code():
     while True:
