@@ -1,6 +1,8 @@
 # Object-Oriented Programming Assignment / Assignment 2 Programming Principles
 # 2023-11-10
 # Jeremy Tica
+import random
+import os 
 
 class Product:
     def __init__(self, code, name, sale_price, manufacture_cost, stock_level, estimated_monthly_units):
@@ -12,12 +14,31 @@ class Product:
         self.estimated_monthly_units = estimated_monthly_units
 
     def show(self):
-        print(self.code)
-        print(self.name)
-        print(self.sale_price)
-        print(self.manufacture_cost)
-        print(self.stock_level)
-        print(self.estimated_monthly_units)
+        print("Product Code:", self.code)
+        print("Product Name:", self.name)
+        print("Product Cost: $"+str(self.sale_price)+ "CAD")
+        print("Manufacture Cost: $"+str(self.manufacture_cost)+" CAD")
+        print("Initial Stock:", self.stock_level)
+        print("Estimate monthly production:", self.estimated_monthly_units)
+
+    def product_sales(self):
+        #! Initial Stock
+        print("\nMonth 1")
+        print("Initial Stock:", self.stock_level)
+        number_of_units_sold = 10 * random.randint(1,10)
+        print(number_of_units_sold, "Units Sold")
+        stock_difference = self.stock_level - number_of_units_sold
+        print("Current Stock:", stock_difference)
+        for months in range(1, 12):
+            print("\nMonth", months+1)
+            if stock_difference <= 0:
+                print("Out of Stock!")
+                break
+            else:
+                number_of_units_sold = 10 * random.randint(1,10)
+                print(number_of_units_sold, "Units Sold")
+                stock_difference -= number_of_units_sold
+                print("Current Stock:", stock_difference)
 
 def ask_product_code():
     while True:
@@ -59,23 +80,27 @@ def ask_product_manufacture_cost():
 def ask_stock_level():
     while True:
         global p_stock_level
-        p_stock_level = int(input("\nPlease input the product stock level: "))
+        p_stock_level = int(input("\nPlease input the current product stock level: "))
         if p_stock_level > 0:
-            ask_estimated_monthly_cost()
+            ask_estimated_monthly_units_manufactured()
             break
         else:
             print("Please enter a valid stock level")
 
-def ask_estimated_monthly_cost():
+def ask_estimated_monthly_units_manufactured():
     while True:
-        global p_estimated_monthly_cost
-        p_estimated_monthly_cost = int(input("\nPlease input the estimated monthly cost: "))
-        if p_estimated_monthly_cost >= 0:
+        global p_estimated_monthly_units
+        p_estimated_monthly_units = int(input("\nPlease input the estimate of units that will be manufactured monthly: "))
+        if p_estimated_monthly_units >= 0:
+            os.system("cls")
             break
         else:
-            print("Please enter a reasonable monthly cost estimate")
+            print("Please enter a valid estimate of units that will be manufactured monthly:")
 
 
 ask_product_code()
-product_one = Product(p_code, p_name, p_sale_price, p_manufacture_cost, p_stock_level, p_estimated_monthly_cost)
+
+product_one = Product(p_code, p_name, p_sale_price, p_manufacture_cost, p_stock_level, p_estimated_monthly_units)
+
 product_one.show()
+product_one.product_sales()
