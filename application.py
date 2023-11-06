@@ -55,7 +55,8 @@ class Product:
         print("\n\nTotal Units Sold:", total_units_sold)
         print("Total Stock Produced: ", total_units_manufactured)
         
-        print("Net-profit: $", total_units_sold * self.sale_price - total_units_manufactured * self.manufacture_cost)
+        net_profit = total_units_sold * self.sale_price - total_units_manufactured * self.manufacture_cost
+        print("Net-profit: $", format(net_profit,".2f"))
 
 def ask_product_code():
     while True:
