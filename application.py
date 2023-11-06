@@ -16,22 +16,21 @@ class Product:
     def show(self):
         print("Product Code:", self.code)
         print("Product Name:", self.name)
-        print("Product Cost: $"+str(self.sale_price)+ "CAD")
-        print("Manufacture Cost: $"+str(self.manufacture_cost)+" CAD")
+        print("Product Cost: $"+str(self.sale_price)+ " CAD")
+        print("Manufacture Cost: $"+str(self.manufacture_cost)+ " CAD")
         print("Initial Stock:", self.stock_level)
         print("Estimate monthly production:", self.estimated_monthly_units)
 
     def product_sales(self):
         #! Initial Stock
         print("\nMonth 1")
-        print("Initial Stock:", self.stock_level)
         number_of_units_sold = 10 * random.randint(1,10)
         print(number_of_units_sold, "Units Sold")
-        stock_difference = self.stock_level - number_of_units_sold
+        stock_difference = self.stock_level + self.estimated_monthly_units - number_of_units_sold
         print("Current Stock:", stock_difference)
 
         total_units_sold = number_of_units_sold
-        total_units_manufactured = self.stock_level
+        total_units_manufactured = self.estimated_monthly_units
 
         for months in range(1, 12):
             print("\nMonth", months+1)
@@ -44,13 +43,31 @@ class Product:
                 print("Out of Stock!")
                 break
             else:
-                number_of_units_sold = 10 * random.randint(1,10)
+                number_of_units_sold = 10 * random.randint(1,10) 
 
-                print(number_of_units_sold, "Units Sold")
                 stock_difference -= number_of_units_sold
-                print("Current Stock:", stock_difference)
-
-                total_units_sold += number_of_units_sold
+                if stock_difference <= 0: #! Under the condition that the stock goes under 0, it will ask the user whether or not they wish to sell the remaining stock from the previous month, and the stock produced from the current month
+                    while True:
+                        accept_sale = input("Not enough stock! Sell remaining stock anyways? [yes/no]: ")
+                        if accept_sale == "yes":
+                            print("Accepting Sale...")
+                            stock_difference += number_of_units_sold #! Redo calculation
+                            number_of_units_sold = stock_difference #! Sell the rest of the stock
+                            print("Selling remaining", number_of_units_sold, "units...")
+                            break #! Break this loop
+                        elif accept_sale == "no":
+                            print("Declining Sale...")
+                            number_of_units_sold = 0
+                            break
+                        else:
+                            print("Please choose a valid option!")
+                    if accept_sale: #! Break outer loop
+                        total_units_sold += number_of_units_sold
+                        break
+                else:
+                    total_units_sold += number_of_units_sold
+                    print(number_of_units_sold, "Units Sold")
+                    print("Current Stock:", stock_difference)
 
         print("\n\nTotal Units Sold:", total_units_sold)
         print("Total Stock Produced: ", total_units_manufactured)
