@@ -22,6 +22,8 @@ class Product:
         print("Estimate monthly production:", self.estimated_monthly_units)
 
     def product_sales(self):
+        unfulfilled_sales = False
+
         #! Initial Stock
         print("\nMonth 1")
         number_of_units_sold = 10 * random.randint(1,10)
@@ -48,9 +50,13 @@ class Product:
                 stock_difference -= number_of_units_sold
                 if stock_difference <= 0: #! Under the condition that the stock goes under 0, it will ask the user whether or not they wish to sell the remaining stock from the previous month, and the stock produced from the current month
                     while True:
-                        accept_sale = input("Not enough stock! Sell remaining stock anyways? [yes/no]: ")
+                        accept_sale = input("Not enough stock! There is " + str(number_of_units_sold) + " waiting to be sold, but there is only " + str(number_of_units_sold - (stock_difference * (-1))) + " of this product in stock. Sell remaining stock anyways? [yes/no]: ")
                         if accept_sale == "yes":
                             print("Accepting Sale...")
+
+                            unfulfilled_sales_value = stock_difference #! Used later to print unfulfilled sales later in the result/report
+                            unfulfilled_sales = True
+
                             stock_difference += number_of_units_sold #! Redo calculation
                             number_of_units_sold = stock_difference #! Sell the rest of the stock
                             print("Selling remaining", number_of_units_sold, "units...")
@@ -68,6 +74,10 @@ class Product:
                     total_units_sold += number_of_units_sold
                     print(number_of_units_sold, "Units Sold")
                     print("Current Stock:", stock_difference)
+
+        if unfulfilled_sales:
+            unfulfilled_sales_value = unfulfilled_sales_value * -1
+            print(unfulfilled_sales_value, "sales could not be fulfilled.")
 
         print("\n\nTotal Units Sold:", total_units_sold)
         print("Total Stock Produced: ", total_units_manufactured)
